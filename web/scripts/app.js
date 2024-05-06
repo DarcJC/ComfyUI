@@ -2117,6 +2117,8 @@ export class ComfyApp {
 				const jsonContent = JSON.parse(reader.result);
 				if (jsonContent?.templates) {
 					this.loadTemplateData(jsonContent);
+				} else if (jsonContent?.zeno) {
+					await this.loadGraphData(jsonContent.extra_data.extra_pnginfo.workflow);
 				} else if(this.isApiJson(jsonContent)) {
 					this.loadApiJson(jsonContent);
 				} else {

@@ -555,6 +555,51 @@ export class ComfyUI {
 				},
 			}),
 			$el("button", {
+				id: "comfy-save-button",
+				textContent: "Zeno Save",
+				onclick: () => {
+					function uuidv4() {
+					    return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+					        (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+					    );
+					}
+
+					let filename = `zeno-ai-workflow-${(new Date()).getTime()}.json`;
+					if (promptFilename.value) {
+						filename = prompt("Save workflow as:", filename);
+						if (!filename) return;
+						if (!filename.toLowerCase().endsWith(".json")) {
+							filename += ".json";
+						}
+					}
+					app.graphToPrompt().then(p=>{
+						const json = JSON.stringify({
+							client_id: uuidv4(),
+							extra_data: {
+								extra_pnginfo: {
+									workflow: p.workflow,
+								},
+							}, 
+							prompt: p.output,
+							zeno: 1,
+						}, null, 2); // convert the data to a JSON string
+						const blob = new Blob([json], {type: "application/json"});
+						const url = URL.createObjectURL(blob);
+						const a = $el("a", {
+							href: url,
+							download: filename,
+							style: {display: "none"},
+							parent: document.body,
+						});
+						a.click();
+						setTimeout(function () {
+							a.remove();
+							window.URL.revokeObjectURL(url);
+						}, 0);
+					});
+				},
+			}),
+			$el("button", {
 				id: "comfy-dev-save-api-button",
 				textContent: "Save (API Format)",
 				style: {width: "100%", display: "none"},
@@ -586,6 +631,7 @@ export class ComfyUI {
 				},
 			}),
 			$el("button", {id: "comfy-load-button", textContent: "Load", onclick: () => fileInput.click()}),
+			$el("button", {id: "comfy-load-button", textContent: "Zeno Load", onclick: () => fileInput.click()}),
 			$el("button", {
 				id: "comfy-refresh-button",
 				textContent: "Refresh",
