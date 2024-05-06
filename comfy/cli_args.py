@@ -120,7 +120,7 @@ parser.add_argument("--verbose", action="store_true", help="Enables more debug p
 
 
 if comfy.options.args_parsing:
-    args = parser.parse_args()
+    args, _ = parser.parse_known_args()
 else:
     args = parser.parse_args([])
 
