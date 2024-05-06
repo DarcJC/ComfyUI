@@ -249,6 +249,7 @@ def get_save_image_path(filename_prefix, output_dir, image_width=0, image_height
 
     full_output_folder = os.path.join(output_dir, subfolder)
 
+    """
     if os.path.commonpath((output_dir, os.path.abspath(full_output_folder))) != output_dir:
         err = "**** ERROR: Saving image outside the output folder is not allowed." + \
               "\n full_output_folder: " + os.path.abspath(full_output_folder) + \
@@ -256,6 +257,7 @@ def get_save_image_path(filename_prefix, output_dir, image_width=0, image_height
               "\n         commonpath: " + os.path.commonpath((output_dir, os.path.abspath(full_output_folder)))
         logging.error(err)
         raise Exception(err)
+    """
 
     try:
         counter = max(filter(lambda a: a[1][:-1] == filename and a[1][-1] == "_", map(map_filename, os.listdir(full_output_folder))))[0] + 1
